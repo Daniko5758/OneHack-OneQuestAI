@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+/* ============================================
+   OneQuest AI — Cyberpunk Design System
+   ============================================ */
+
+:root {
+  /* Base Colors */
+  --bg-primary: #050510;
+  --bg-secondary: #0a0f1e;
+  --bg-tertiary: #111827;
+  --bg-card: rgba(15, 23, 42, 0.6);
+
+  /* Accent Colors */
+  --cyan: #00f0ff;
+  --cyan-dim: rgba(0, 240, 255, 0.15);
+  --cyan-glow: rgba(0, 240, 255, 0.4);
+  --magenta: #ff00e5;
+  --magenta-dim: rgba(255, 0, 229, 0.15);
+  --magenta-glow: rgba(255, 0, 229, 0.4);
+  --purple: #8b5cf6;
+  --purple-dim: rgba(139, 92, 246, 0.15);
+  --purple-glow: rgba(139, 92, 246, 0.4);
+  --green: #00ff88;
+  --green-dim: rgba(0, 255, 136, 0.15);
+  --red: #ff3366;
+  --red-dim: rgba(255, 51, 102, 0.15);
+  --amber: #f59e0b;
+
+  /* Text */
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+
+  /* Glass */
+  --glass-bg: rgba(15, 23, 42, 0.5);
+  --glass-border: rgba(148, 163, 184, 0.1);
+  --glass-hover-border: rgba(148, 163, 184, 0.2);
+  --glass-blur: 16px;
+
+  /* Spacing */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ============================================
+   Keyframe Animations
+   ============================================ */
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes rotate-badge {
+  0% { transform: perspective(600px) rotateY(0deg); }
+  100% { transform: perspective(600px) rotateY(360deg); }
+}
+
+@keyframes shine-sweep {
+  0% { transform: translateX(-100%) rotate(25deg); }
+  100% { transform: translateX(200%) rotate(25deg); }
+}
+
+@keyframes border-rotate {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
+}
+
+@keyframes particle-drift {
+  0% { transform: translate(0, 0); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+
+@keyframes expand-line {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes draw-check {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+@keyframes spin-ring {
+  100% { transform: rotate(360deg); }
+}
+
+/* ============================================
+   Glass Utilities
+   ============================================ */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+.glass-hover:hover {
+  border-color: var(--glass-hover-border);
+  background: rgba(15, 23, 42, 0.65);
+}
+
+/* ============================================
+   Gradient Text
+   ============================================ */
+
+.gradient-text-cyan {
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-magenta {
+  background: linear-gradient(135deg, var(--magenta), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   Glow Utilities
+   ============================================ */
+
+.glow-cyan {
+  box-shadow: 0 0 20px var(--cyan-glow), 0 0 60px rgba(0, 240, 255, 0.1);
+}
+
+.glow-magenta {
+  box-shadow: 0 0 20px var(--magenta-glow), 0 0 60px rgba(255, 0, 229, 0.1);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px var(--purple-glow), 0 0 60px rgba(139, 92, 246, 0.1);
+}
+
+/* ============================================
+   Override dapp-kit default styles
+   ============================================ */
+
+[data-dapp-kit] {
+  --dapp-kit-button-bg-color: transparent !important;
+  --dapp-kit-button-text-color: var(--text-primary) !important;
+  --dapp-kit-button-border-radius: var(--radius-md) !important;
+}
