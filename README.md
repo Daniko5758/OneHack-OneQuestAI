@@ -25,14 +25,28 @@ An AI-driven onboarding quest platform built on the OneChain network. Community 
 ## 🏗️ Architecture Overview
 
 ```mermaid
-graph TB
-    subgraph Client["Frontend (Next.js App Router)"]
+graph TD
+    %% ═══ Layer 1: Frontend ═══
+    subgraph FRONTEND["Frontend (Next.js App Router)"]
+        direction TB
         UI["React UI<br/>Framer Motion + Glass UI"]
         DK["@onelabs/dapp-kit<br/>OneWallet Integration"]
         UI --> DK
     end
 
-    subgraph API["Next.js API Routes (Backend)"]
+    %% ═══ Layer 2: Smart Contract ═══
+    subgraph SMART_CONTRACT["OneChain Smart Contract (Move)"]
+        direction TB
+        SC["onequest::core"]
+        SC --- PAY["pay_and_create_campaign<br/>Entry Function"]
+        SC --- MINT["record_completion_and_mint_nft<br/>Entry Function"]
+        SC --- CAP["RelayerCap<br/>Admin Capability"]
+        SC --- EVT["Events<br/>CampaignCreated / QuestCompleted / BadgeMinted"]
+    end
+
+    %% ═══ Layer 3: Backend ═══
+    subgraph BACKEND["Next.js API Routes (Backend)"]
+        direction TB
         GEN["/api/quest/generate<br/>AI Quest Generation"]
         SAVE["/api/quest/save<br/>Campaign Publishing"]
         VERIFY["/api/quest/verify<br/>Proof Verification + NFT Mint"]
@@ -41,30 +55,24 @@ graph TB
         LB["/api/leaderboard<br/>Rankings"]
     end
 
-    subgraph External["External Services"]
+    %% ═══ Layer 4: External Services ═══
+    subgraph EXTERNAL["External Services"]
+        direction TB
         GEMINI["Google Gemini AI<br/>Quest Generation"]
         SUPA["Supabase<br/>PostgreSQL Database"]
         RPC["OneChain RPC<br/>Testnet"]
     end
 
-    subgraph Blockchain["OneChain Smart Contract (Move)"]
-        SC["onequest::core"]
+    %% ═══ Layer 5: On-Chain Storage ═══
+    subgraph ONCHAIN["On-Chain Storage & Rewards"]
+        direction TB
         VAULT["CampaignVault<br/>Holds 0.5 OCT Payments"]
-        CAP["RelayerCap<br/>Admin Capability"]
         BADGE["QuestBadge NFT<br/>On-Chain Reward"]
-        PAY["pay_and_create_campaign<br/>Entry Function"]
-        MINT["record_completion_and_mint_nft<br/>Entry Function"]
-        EVT["Events<br/>CampaignCreated / QuestCompleted / BadgeMinted"]
-
-        SC --- VAULT
-        SC --- CAP
-        SC --- BADGE
-        SC --- PAY
-        SC --- MINT
-        SC --- EVT
     end
 
-    Client -->|HTTP| API
+    %% ═══ Edges ═══
+    FRONTEND -->|HTTP| BACKEND
+    DK -->|"Sign TX: pay_and_create_campaign"| PAY
     GEN --> GEMINI
     SAVE --> SUPA
     SAVE -->|Verify Payment TX| RPC
@@ -73,7 +81,6 @@ graph TB
     CAMP --> SUPA
     SUBS --> SUPA
     LB --> SUPA
-    DK -->|Sign TX: pay_and_create_campaign| PAY
     PAY -->|Store OCT| VAULT
     MINT -->|Transfer NFT| BADGE
 ```
